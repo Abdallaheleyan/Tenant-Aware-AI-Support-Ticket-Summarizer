@@ -41,4 +41,14 @@ class TicketController extends Controller
 
         return response()->json($ticket, 201);
     }
+
+    /**
+     * Toggle a ticket between open and resolved.
+     */
+    public function toggleStatus(Ticket $ticket): JsonResponse
+    {
+        $newStatus = $ticket->status === 'open' ? 'resolved' : 'open';
+        $ticket->update(['status' => $newStatus]);
+        return response()->json($ticket);
+    }
 }

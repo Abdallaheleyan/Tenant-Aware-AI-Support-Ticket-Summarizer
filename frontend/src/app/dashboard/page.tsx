@@ -79,6 +79,16 @@ export default function DashboardPage() {
         }
     };
 
+    const handleToggleTicketStatus = async (ticketId: number, e: React.MouseEvent) => {
+        e.stopPropagation();
+        try {
+            await axios.patch(`/api/tickets/${ticketId}/toggle`);
+            await fetchTickets();
+        } catch (err) {
+            console.error('Failed to toggle ticket status', err);
+        }
+    };
+
     const getStatusBadge = (status: string) => {
         if (status === 'open') return 'bg-blue-50 text-blue-700 ring-1 ring-blue-700/10';
         if (status === 'resolved') return 'bg-green-50 text-green-700 ring-1 ring-green-600/20';
@@ -259,9 +269,17 @@ export default function DashboardPage() {
                                             {ticket.title}
                                         </h3>
                                     </div>
-                                    <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusBadge(ticket.status)}`}>
-                                        {ticket.status}
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={(e) => handleToggleTicketStatus(ticket.id, e)}
+                                            className="shrink-0 inline-flex items-center rounded-md bg-white border border-gray-200 px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 transition shadow-sm z-10"
+                                        >
+                                            {ticket.status === 'open' ? 'Mark Resolved' : 'Re-Open Ticket'}
+                                        </button>
+                                        <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusBadge(ticket.status)}`}>
+                                            {ticket.status}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 {/* Description */}

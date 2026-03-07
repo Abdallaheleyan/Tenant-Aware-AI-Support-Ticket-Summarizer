@@ -17,4 +17,5 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tickets', [TicketController::class, 'index']);
     Route::post('/tickets', [TicketController::class, 'store']);
+    Route::patch('/tickets/{ticket}/toggle', [TicketController::class, 'toggleStatus']);
 });
